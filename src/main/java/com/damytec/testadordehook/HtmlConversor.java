@@ -11,7 +11,11 @@ public class HtmlConversor {
 
     public static String converter(List<HookDTO> hooks) {
         StringBuilder sb =
-                new StringBuilder("<html><body><style type=\"text/css\">\n" +
+                new StringBuilder("<html>" +
+                        "<head>\n" +
+                        "  <title>Paumolecencia</title>\n" +
+                        "</head>" +
+                        "<body><style type=\"text/css\">\n" +
                         ".tg  {border-collapse:collapse;border-spacing:0;}\n" +
                         ".tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;\n" +
                         "  overflow:hidden;padding:10px 5px;word-break:normal;}\n" +
@@ -23,7 +27,7 @@ public class HtmlConversor {
                         "<thead>\n" +
                         "  <tr>\n" +
                         "    <th class=\"tg-0lax\">URL</th>\n" +
-                        "    <th class=\"tg-0lax\">Método</th>\n" +
+                        "    <th class=\"tg-0lax\">Metodo</th>\n" +
                         "    <th class=\"tg-0lax\">Body</th>\n" +
                         "    <th class=\"tg-0lax\">Headers</th>\n" +
                         "    <th class=\"tg-0lax\">Origem</th>\n" +
