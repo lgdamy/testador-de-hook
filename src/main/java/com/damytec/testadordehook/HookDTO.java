@@ -15,7 +15,6 @@ public class HookDTO {
     private String headers;
     private String origem;
     private String destino;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/YYYY - HH:mm:ss", locale = "GMT-3")
     private Date hora;
 
     public String getMetodo() {
