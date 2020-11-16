@@ -46,7 +46,7 @@ public class HtmlConversor {
                 "</style>\n" +
                 "<p> Configure o hook para chamar: (" + fire + ") a rota \u00e9 aditiva, <a href=\"" + exemplo + "\">exemplo</a></p>");
         if (disabled != null) {
-            sb.append("<p> Ocultando <a href=''>"+ disabled +"</a>");
+            sb.append("<p> Ocultando <a href='/'>"+ disabled +"</a>");
         }
         sb.append("<table class=\"tg\">\n" +
                 "<thead>\n" +
