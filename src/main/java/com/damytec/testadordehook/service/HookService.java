@@ -42,10 +42,10 @@ public class HookService {
 
     @Transactional
     public void register(HttpServletRequest req, @Nullable Object body) {
-        Enumeration headerNames = req.getHeaderNames();
+        Enumeration<String> headerNames = req.getHeaderNames();
         MultiValueMap<String, String> mvm = new LinkedMultiValueMap<>();
         while (headerNames.hasMoreElements()) {
-            String key = (String) headerNames.nextElement();
+            String key = headerNames.nextElement();
             String value = req.getHeader(key);
             mvm.add(key, value);
         }
@@ -59,18 +59,16 @@ public class HookService {
         }
 
         String headers = null;
-        if ( headers != null) {
-            try {
-                headers = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mvm);
-            } catch (Exception ignored) {}
-        }
+        try {
+            headers = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mvm);
+        } catch (Exception ignored) {}
         HookDTO hook = new HookDTO();
         hook.setHora(new Date());
-        hook.setHeaders(headers);
-        hook.setBody(corpo);
+        hook.setHeaders(this.shorten(headers));
+        hook.setBody(this.shorten(corpo));
         hook.setMetodo(req.getMethod());
-        hook.setOrigem(req.getRemoteAddr());
-        hook.setDestino(req.getRequestURL().toString());
+        hook.setOrigem(this.shorten(req.getRemoteAddr()));
+        hook.setDestino(this.shorten(req.getRequestURL().toString()));
         this.incrementar(hook);
     }
 
@@ -88,5 +86,12 @@ public class HookService {
 
     public void alterarTamanhoConsulta(int size) {
         this.size = size <= 1 ? 1 : size >= MAX_SIZE ? MAX_SIZE : size;
+    }
+
+    private String shorten(@Nullable String str) {
+        if (str == null) {
+            return null;
+        }
+        return str.length() > 200 ? str.substring(0,200).concat("(...)") : str;
     }
 }
