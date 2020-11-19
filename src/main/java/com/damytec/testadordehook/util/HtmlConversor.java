@@ -1,5 +1,6 @@
-package com.damytec.testadordehook;
+package com.damytec.testadordehook.util;
 
+import com.damytec.testadordehook.domain.HookDTO;
 import org.springframework.lang.Nullable;
 
 import java.text.SimpleDateFormat;
@@ -45,6 +46,7 @@ public class HtmlConversor {
                 ".tg .tg-body{text-align:left;vertical-align:top}\n" +
                 "</style>\n" +
                 "<p> Configure o hook para chamar: (" + fire + ") a rota \u00e9 aditiva, <a href=\"" + exemplo + "\">exemplo</a></p>");
+        sb.append("<p> Exibir <a href='?size=5'>5</a>, <a href='?size=10'>10</a>, <a href='?size=25'>25</a>, <a href='?size=50'>50</a>, <a href='?size=100'>100</a> registros</p>");
         if (disabled != null) {
             sb.append("<p> Ocultando <a href='/'>"+ disabled +"</a>");
         }

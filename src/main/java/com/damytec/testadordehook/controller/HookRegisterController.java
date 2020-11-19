@@ -1,5 +1,6 @@
-package com.damytec.testadordehook;
+package com.damytec.testadordehook.controller;
 
+import com.damytec.testadordehook.service.HookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class HookRegisterController {
     @Autowired
-    private HookSaverService service;
+    private HookService service;
 
     @RequestMapping({"/fire","/fire/**"})
     public String hookFire(@RequestBody(required = false) Object body, HttpServletRequest req) {

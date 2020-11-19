@@ -1,21 +1,55 @@
-package com.damytec.testadordehook;
+package com.damytec.testadordehook.domain.jpa;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.damytec.testadordehook.domain.HookDTO;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
- * @author lgdamy@raiadrogasil.com on 13/11/2020
+ * @author lgdamy@raiadrogasil.com on 19/11/2020
  */
-public class HookDTO {
+@Entity
+public class Hook implements Serializable {
+    @Id
+    @GeneratedValue
+    private Long id;
+
     private String metodo;
+
+    @Lob
     private String body;
+
+    @Lob
     private String headers;
+
     private String origem;
+
     private String destino;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date hora;
+
+    public Hook() {
+    }
+
+    public Hook(HookDTO h) {
+        super();
+        this.metodo = h.getMetodo();
+        this.body = h.getBody();
+        this.destino = h.getDestino();
+        this.origem = h.getOrigem();
+        this.headers = h.getHeaders();
+        this.hora = h.getHora();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getMetodo() {
         return metodo;
@@ -49,19 +83,19 @@ public class HookDTO {
         this.origem = origem;
     }
 
-    public Date getHora() {
-        return hora;
-    }
-
-    public void setHora(Date hora) {
-        this.hora = hora;
-    }
-
     public String getDestino() {
         return destino;
     }
 
     public void setDestino(String destino) {
         this.destino = destino;
+    }
+
+    public Date getHora() {
+        return hora;
+    }
+
+    public void setHora(Date hora) {
+        this.hora = hora;
     }
 }
