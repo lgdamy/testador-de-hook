@@ -64,11 +64,11 @@ public class HookService {
         } catch (Exception ignored) {}
         HookDTO hook = new HookDTO();
         hook.setHora(new Date());
-        hook.setHeaders(this.shorten(headers));
-        hook.setBody(this.shorten(corpo));
+        hook.setHeaders(headers);
+        hook.setBody(corpo);
         hook.setMetodo(req.getMethod());
-        hook.setOrigem(this.shorten(req.getRemoteAddr()));
-        hook.setDestino(this.shorten(req.getRequestURL().toString()));
+        hook.setOrigem(req.getRemoteAddr());
+        hook.setDestino(req.getRequestURL().toString());
         this.incrementar(hook);
     }
 
@@ -86,12 +86,5 @@ public class HookService {
 
     public void alterarTamanhoConsulta(int size) {
         this.size = size <= 1 ? 1 : size >= MAX_SIZE ? MAX_SIZE : size;
-    }
-
-    private String shorten(@Nullable String str) {
-        if (str == null) {
-            return null;
-        }
-        return str.length() > 200 ? str.substring(0,200).concat("(...)") : str;
     }
 }
