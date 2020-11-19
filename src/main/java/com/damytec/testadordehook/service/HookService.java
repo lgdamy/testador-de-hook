@@ -3,8 +3,8 @@ package com.damytec.testadordehook.service;
 import com.damytec.testadordehook.domain.HookDTO;
 import com.damytec.testadordehook.domain.jpa.Hook;
 import com.damytec.testadordehook.repository.HookRepository;
+import com.damytec.testadordehook.util.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,9 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import static com.damytec.testadordehook.util.Constants.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -30,8 +34,6 @@ public class HookService {
     private ObjectMapper mapper;
 
     private int size;
-
-    private static final int MAX_SIZE = 100;
 
     @Autowired
     public HookService(ObjectMapper mapper, HookRepository repo) {
@@ -60,7 +62,7 @@ public class HookService {
 
         String headers = null;
         try {
-            headers = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(mvm);
+            headers = mvm.entrySet().stream().map(e -> this.capital(e.getKey()) + HEADER_VALUE_SEPARADOR + e.getValue().stream().collect(Collectors.joining(", "))).collect(Collectors.joining(HEADER_INDEX_SEPARATOR));
         } catch (Exception ignored) {}
         HookDTO hook = new HookDTO();
         hook.setHora(new Date());
@@ -86,5 +88,12 @@ public class HookService {
 
     public void alterarTamanhoConsulta(int size) {
         this.size = size <= 1 ? 1 : size >= MAX_SIZE ? MAX_SIZE : size;
+    }
+
+    private String capital(String txt) {
+        String regex = "\\b(.)(.*?)\\b";
+        return Pattern.compile(regex).matcher(txt).replaceAll(
+                m -> m.group(1).toUpperCase() + m.group(2)
+        );
     }
 }

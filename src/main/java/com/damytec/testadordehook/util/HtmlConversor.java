@@ -2,10 +2,13 @@ package com.damytec.testadordehook.util;
 
 import com.damytec.testadordehook.domain.HookDTO;
 import org.springframework.lang.Nullable;
+import static com.damytec.testadordehook.util.Constants.*;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 /**
  * Preguiça de usar o thymeleaf pra essa porcaria
@@ -23,7 +26,7 @@ public class HtmlConversor {
     }
 
     private HtmlConversor() {
-        this.sdf = new SimpleDateFormat("dd/MM/yy - HH:mm:ss");
+        this.sdf = new SimpleDateFormat("dd/MM/yy (HH:mm:ss)");
         sdf.setTimeZone(TimeZone.getTimeZone("GMT-03"));
     }
 
@@ -43,7 +46,8 @@ public class HtmlConversor {
                 ".tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;\n" +
                 "  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}\n" +
                 ".tg .tg-head{background-color:#efefef;text-align:left;vertical-align:top}\n" +
-                ".tg .tg-body{text-align:left;vertical-align:top}\n" +
+                ".tg .tg-body{text-align:left;vertical-align:top;white-space:pre-wrap}\n" +
+                ".hk {background-color:#efefef}\n " +
                 "</style>\n" +
                 "<p> Configure o hook para chamar: (" + fire + ") a rota \u00e9 aditiva, <a href=\"" + exemplo + "\">exemplo</a></p>");
         sb.append("<p> Exibir <a href='?size=5'>5</a>, <a href='?size=10'>10</a>, <a href='?size=25'>25</a>, <a href='?size=50'>50</a>, <a href='?size=100'>100</a> registros</p>");
@@ -65,11 +69,13 @@ public class HtmlConversor {
         if (hooks != null && !hooks.isEmpty()) {
             sb.append("<tbody>\n");
             for (HookDTO hook : hooks) {
+                String body = hook.getBody() != null ? hook.getBody() : "";
+                String headers = prettyHeaders(hook.getHeaders());
                 sb.append("  <tr>\n" +
                         ("URL".equalsIgnoreCase(disabled) ? "" : "    <td class=\"tg-body\">" + hook.getDestino() + "</td>\n") +
                         ("Metodo".equalsIgnoreCase(disabled) ? "" : "    <td class=\"tg-body\">" + hook.getMetodo() + "</td>\n") +
-                        ("Body".equalsIgnoreCase(disabled) ? "" : "    <td class=\"tg-body\">" + hook.getBody() + "</td>\n") +
-                        ("Headers".equalsIgnoreCase(disabled) ? "" : "    <td class=\"tg-body\">" + hook.getHeaders() + "</td>\n") +
+                        ("Body".equalsIgnoreCase(disabled) ? "" : "    <td class=\"tg-body\">" + body + "</td>\n") +
+                        ("Headers".equalsIgnoreCase(disabled) ? "" : "    <td class=\"tg-body\">" + headers + "</td>\n") +
                         ("Origem".equalsIgnoreCase(disabled) ? "" : "    <td class=\"tg-body\">" + hook.getOrigem() + "</td>\n") +
                         ("Hora".equalsIgnoreCase(disabled) ? "" : "    <td class=\"tg-body\">" + sdf.format(hook.getHora()) + "</td>\n") +
                         "  </tr>\n");
@@ -82,5 +88,19 @@ public class HtmlConversor {
                 "<p>C\u00f3digo fonte: <a href=\"https://github.com/lgdamy/testador-de-hook\">https://github.com/lgdamy/testador-de-hook</a></p>" +
                 "</footer>");
         return sb.toString();
+    }
+
+    private String prettyHeaders(@Nullable String headers) {
+        if (headers == null) {
+            return "";
+        }
+        try {
+            return Arrays.stream(headers.split(HEADER_INDEX_SEPARATOR)).map(h -> {
+                String[] kv = h.split(HEADER_VALUE_SEPARADOR, 2);
+                return "<span class=\"hk\">" + kv[0] + "</span>" + HEADER_VALUE_SEPARADOR + kv[1];
+            }).collect(Collectors.joining(HEADER_INDEX_SEPARATOR));
+        }catch (Exception e) {
+            return headers;
+        }
     }
 }
