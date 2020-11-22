@@ -1,0 +1,122 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Testador de Webhook</title>
+</head>
+<body>
+<style type="text/css">
+    .tg {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    .tg td {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+    }
+
+    .tg th {
+        border-color: black;
+        border-style: solid;
+        border-width: 1px;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        overflow: hidden;
+        padding: 10px 5px;
+        word-break: normal;
+    }
+
+    .tg .tg-head {
+        background-color: #efefef;
+        text-align: left;
+        vertical-align: top
+    }
+
+    .tg .tg-body {
+        text-align: left;
+        vertical-align: top;
+        white-space: pre-wrap
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 5px;
+        height: 75px;
+        background-color: #313131;
+        color: white;
+        background-image: url("/logo_damytech.png");
+        background-size: 75px;
+        background-repeat: no-repeat;
+        background-position: 99% center;
+    }
+    .footer-a {
+        color: white;
+    }
+    .footer-area{
+        height: 100px;
+    }
+</style>
+<p>
+    <span th:text="#{instructions(${baseUrl}+'fire')}">instructions</span>
+    <a class="header-a" th:href="${baseUrl}+'fire/abc/123'">Exemplo</a>
+</p>
+
+<form action="/" th:object="${attributes}" method="get">
+    <span>Exibir: </span>
+    <select id="tamanho" name="tamanho" th:field="${attributes.size}" onchange="this.form.submit()">
+        <option th:each="i : ${sizes}" th:value="${i}" th:text="${i}"></option>
+    </select>
+    <table class="tg">
+        <thead>
+        <tr>
+            <th class=tg-head>URL <input type="checkbox" name="url" th:field="${attributes.url}" th:fi
+                                         onchange=this.form.submit()></th>
+            <th class="tg-head">Metodo <input type="checkbox" name="metodo" th:field="${attributes.metodo}" th:fi
+                                              onchange=this.form.submit()></th>
+            <th class="tg-head">Body <input type="checkbox" name="body" th:field="${attributes.body}" th:fi
+                                            onchange=this.form.submit()></th>
+            <th class="tg-head">Headers <input type="checkbox" name="headers" th:field="${attributes.headers}" th:fi
+                                               onchange=this.form.submit()></th>
+            <th class="tg-head">Origem <input type="checkbox" name="origem" th:field="${attributes.origem}" th:fi
+                                              onchange=this.form.submit()></th>
+            <th class="tg-head">Hora <input type="checkbox" name="hora" th:field="${attributes.hora}" th:fi
+                                            onchange=this.form.submit()></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${hooks.empty}">
+            <td class="tg-body" colspan="6">Nenhum registro</td>
+        </tr>
+        <tr th:each="hook : ${hooks}">
+            <td class="tg-body"><span th:text="${attributes.url} ? ${hook.destino} : ''">URL</span></td>
+            <td class="tg-body"><span th:text="${attributes.metodo} ? ${hook.metodo} : ''">Metodo</span></td>
+            <td class="tg-body"><span th:text="${attributes.body} ? ${hook.body} : ''">Body</span></td>
+            <td class="tg-body"><span th:text="${attributes.headers} ? ${hook.headers} : ''">Headers</span></td>
+            <td class="tg-body"><span th:text="${attributes.origem} ? ${hook.origem} : ''">Origem</span></td>
+            <td class="tg-body"><span th:text="${attributes.hora} ? ${hook.hora} : ''">Hora</span></td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<div class="footer-area">
+
+</div>
+<div class="footer">
+    <p th:text="#{footer.autor}"></p>
+    <p> <span th:text="#{footer.fonte}"></span>
+        <a class="footer-a" th:href="#{footer.github.url}" th:text="Github"></a>
+    </p>
+</div>
+</body>
+
+</html>

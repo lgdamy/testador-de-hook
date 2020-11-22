@@ -3,7 +3,6 @@ package com.damytec.testadordehook.service;
 import com.damytec.testadordehook.domain.HookDTO;
 import com.damytec.testadordehook.domain.jpa.Hook;
 import com.damytec.testadordehook.repository.HookRepository;
-import com.damytec.testadordehook.util.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,13 +32,10 @@ public class HookService {
 
     private ObjectMapper mapper;
 
-    private int size;
-
     @Autowired
     public HookService(ObjectMapper mapper, HookRepository repo) {
         this.mapper = mapper;
         this.repo = repo;
-        this.size = 10;
     }
 
     @Transactional
@@ -81,13 +77,10 @@ public class HookService {
         repo.save(new Hook(hook));
     }
 
-    public List<HookDTO> buscarHooks() {
-        Page<Hook> hooks = repo.findAll(PageRequest.of(0, this.size, Sort.by(Sort.Direction.DESC, "hora")));
+    public List<HookDTO> buscarHooks(int size) {
+        size = size <= 1 ? 1 : size >= MAX_SIZE ? MAX_SIZE : size;
+        Page<Hook> hooks = repo.findAll(PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "hora")));
         return hooks.getContent().stream().map(HookDTO::new).collect(Collectors.toList());
-    }
-
-    public void alterarTamanhoConsulta(int size) {
-        this.size = size <= 1 ? 1 : size >= MAX_SIZE ? MAX_SIZE : size;
     }
 
     private String capital(String txt) {
