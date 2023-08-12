@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.damytec</groupId>
 	<artifactId>testadordehook</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>Testador de Hook</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Webhook testing software</description>
 
 	<properties>
 		<java.version>11</java.version>
@@ -38,11 +38,6 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
