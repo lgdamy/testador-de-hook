@@ -79,4 +79,17 @@ public class WebAttributesDTO {
     public void setHora(boolean hora) {
         this.hora = hora;
     }
+
+    public boolean isAny() {
+        return url || metodo || body || headers || origem || hora;
+    }
+
+    public int getColCount() {
+        return (url ? 1 : 0) +
+                (metodo ? 1 : 0) +
+                (body ? 1 : 0) +
+                (headers ? 1 : 0) +
+                (origem ? 1 : 0) +
+                (hora ? 1 : 0);
+    }
 }

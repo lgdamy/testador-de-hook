@@ -5,6 +5,7 @@ import com.damytec.testadordehook.domain.jpa.Hook;
 import com.damytec.testadordehook.repository.HookRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -28,12 +30,17 @@ import java.util.stream.Collectors;
 @Service
 public class HookService {
 
-    private HookRepository repo;
+    private final HookRepository repo;
 
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper;
 
-    @Autowired
-    public HookService(ObjectMapper mapper, HookRepository repo) {
+    @Value("${origin-ip-header}")
+    private String originIpHeader;
+
+    public HookService(
+            ObjectMapper mapper,
+            HookRepository repo
+    ) {
         this.mapper = mapper;
         this.repo = repo;
     }
@@ -65,7 +72,7 @@ public class HookService {
         hook.setHeaders(headers);
         hook.setBody(corpo);
         hook.setMetodo(req.getMethod());
-        hook.setOrigem(req.getRemoteAddr());
+        hook.setOrigem(Optional.ofNullable(req.getHeader(originIpHeader)).orElseGet(req::getRemoteAddr));
         hook.setDestino(req.getRequestURL().toString());
         this.incrementar(hook);
     }

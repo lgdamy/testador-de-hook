@@ -5,45 +5,54 @@
 </head>
 <body>
 <style type="text/css">
-    .tg {
+    .checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .checkbox {
+        padding: 5px;
+        margin: 5px;
+        border-radius: 10px;
+        cursor: pointer;
+        background-color: lightpink;
+    }
+
+    .checkbox[checked] {
+        background-color: lawngreen;
+    }
+
+    table {
         border-collapse: collapse;
         border-spacing: 0;
+        width: 100%;
     }
 
-    .tg td {
-        border-color: black;
-        border-style: solid;
-        border-width: 1px;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-        overflow: hidden;
-        padding: 10px 5px;
-        word-break: normal;
+    th {
+        background-color: #dddddd;
     }
 
-    .tg th {
-        border-color: black;
-        border-style: solid;
-        border-width: 1px;
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-        font-weight: normal;
-        overflow: hidden;
-        padding: 10px 5px;
-        word-break: normal;
-    }
-
-    .tg .tg-head {
-        background-color: #efefef;
+    th, td {
         text-align: left;
-        vertical-align: top
+        padding: 16px;
     }
 
-    .tg .tg-body {
-        text-align: left;
-        vertical-align: top;
+    tr {
         white-space: pre-wrap;
-        -webkit-text-size-adjust: none;
+    }
+
+    th:first-of-type {
+        border-top-left-radius: 10px;
+    }
+    th:last-of-type {
+        border-top-right-radius: 10px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
     }
 
     .footer {
@@ -60,62 +69,84 @@
         background-repeat: no-repeat;
         background-position: 99% center;
     }
+
     .footer-a {
         color: white;
     }
-    .footer-area{
+
+    .footer-area {
         height: 100px;
     }
 </style>
 <p>
-    <span th:text="#{instructions(${baseUrl}+'fire')}">instructions</span>
-    <a class="header-a" th:href="${baseUrl}+'fire/abc/123'">Exemplo</a>
+    <span th:text="#{label.instructions(${baseUrl})}+': '"/>
+    <a class="header-a" th:href="${baseUrl}+'fire/abc/123'" th:text="#{label.example}" target="_blank"/>
 </p>
 
 <form action="/" th:object="${attributes}" method="get">
-    <span>Exibir: </span>
+    <span th:text="#{label.show} + ': '"/>
     <select id="tamanho" name="tamanho" th:field="${attributes.size}" onchange="this.form.submit()">
         <option th:each="i : ${sizes}" th:value="${i}" th:text="${i}"></option>
     </select>
-    <table class="tg">
-        <thead>
-        <tr>
-            <th class=tg-head>URL <input type="checkbox" name="url" th:field="${attributes.url}" th:fi
-                                         onchange=this.form.submit()></th>
-            <th class="tg-head">Metodo <input type="checkbox" name="metodo" th:field="${attributes.metodo}" th:fi
-                                              onchange=this.form.submit()></th>
-            <th class="tg-head">Body <input type="checkbox" name="body" th:field="${attributes.body}" th:fi
-                                            onchange=this.form.submit()></th>
-            <th class="tg-head">Headers <input type="checkbox" name="headers" th:field="${attributes.headers}" th:fi
-                                               onchange=this.form.submit()></th>
-            <th class="tg-head">Origem <input type="checkbox" name="origem" th:field="${attributes.origem}" th:fi
-                                              onchange=this.form.submit()></th>
-            <th class="tg-head">Hora <input type="checkbox" name="hora" th:field="${attributes.hora}" th:fi
-                                            onchange=this.form.submit()></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:if="${hooks.empty}">
-            <td class="tg-body" colspan="6">Nenhum registro</td>
-        </tr>
-        <tr th:each="hook : ${hooks}">
-            <td class="tg-body"><span th:text="${attributes.url} ? ${hook.destino} : ''">URL</span></td>
-            <td class="tg-body"><span th:text="${attributes.metodo} ? ${hook.metodo} : ''">Metodo</span></td>
-            <td class="tg-body"><span th:text="${attributes.body} ? ${hook.body} : ''">Body</span></td>
-            <td class="tg-body"><span th:text="${attributes.headers} ? ${hook.headers} : ''">Headers</span></td>
-            <td class="tg-body"><span th:text="${attributes.origem} ? ${hook.origem} : ''">Origem</span></td>
-            <td class="tg-body"><span th:text="${attributes.hora} ? ${hook.hora} : ''">Hora</span></td>
-        </tr>
-        </tbody>
-    </table>
+    <label class="checkbox" th:checked="${attributes.url}">
+        <span th:text="#{label.url}"/>
+        <input type="checkbox" th:field="${attributes.url}" onchange=this.form.submit()>
+    </label>
+    <label class="checkbox" th:checked="${attributes.metodo}">
+        <span th:text="#{label.method}"/>
+        <input type="checkbox" th:field="${attributes.metodo}" onchange=this.form.submit()>
+    </label>
+    <label class="checkbox" th:checked="${attributes.body}">
+        <span th:text="#{label.body}"/>
+        <input type="checkbox" th:field="${attributes.body}" onchange=this.form.submit()>
+    </label>
+    <label class="checkbox" th:checked="${attributes.headers}">
+        <span th:text="#{label.headers}"/>
+        <input type="checkbox" th:field="${attributes.headers}" onchange=this.form.submit()>
+    </label>
+    <label class="checkbox" th:checked="${attributes.origem}">
+        <span th:text="#{label.origin}"/>
+        <input type="checkbox" th:field="${attributes.origem}" onchange=this.form.submit()>
+    </label>
+    <label class="checkbox" th:checked="${attributes.hora}">
+        <span th:text="#{label.time}"/>
+        <input type="checkbox" th:field="${attributes.hora}" onchange=this.form.submit()>
+    </label>
 </form>
+<table th:if="${attributes.any}">
+    <thead>
+    <tr>
+        <th th:if="${attributes.url}" th:text="#{label.url}"/>
+        <th th:if="${attributes.metodo}" th:text="#{label.method}"/>
+        <th th:if="${attributes.body}" th:text="#{label.body}"/>
+        <th th:if="${attributes.headers}" th:text="#{label.headers}"/>
+        <th th:if="${attributes.origem}" th:text="#{label.origin}"/>
+        <th th:if="${attributes.hora}" th:text="#{label.time}"/>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${hooks.empty}">
+        <td th:colspan="${attributes.colCount}">Nenhum registro</td>
+    </tr>
+    <tr th:each="hook : ${hooks}">
+        <td th:if="${attributes.url}"><span th:text="${hook.destino}"/></td>
+        <td th:if="${attributes.metodo}"><span th:text="${hook.metodo}"/></td>
+        <td th:if="${attributes.body}"><span th:utext="${hook.body}"/></td>
+        <td th:if="${attributes.headers}"><span th:text="${hook.headers}"/></td>
+        <td th:if="${attributes.origem}"><a th:href="#{url.ip-address-location(${hook.origem})}"
+                                            th:text="${hook.origem}" target="_blank"/></td>
+        <td th:if="${attributes.hora}"><span th:text="${hook.hora}"/></td>
+    </tr>
+    </tbody>
+</table>
+
 <div class="footer-area">
 
 </div>
 <div class="footer">
     <p th:text="#{footer.autor}"></p>
-    <p> <span th:text="#{footer.fonte}"></span>
-        <a class="footer-a" th:href="#{footer.github.url}" th:text="Github"></a>
+    <p><span th:text="#{footer.fonte}"></span>
+        <a class="footer-a" th:href="#{footer.github.url}" th:text="Github" target="_blank"></a>
     </p>
 </div>
 </body>
