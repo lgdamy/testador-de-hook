@@ -4,7 +4,6 @@ import com.damytec.testadordehook.domain.HookDTO;
 import com.damytec.testadordehook.domain.jpa.Hook;
 import com.damytec.testadordehook.repository.HookRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -65,7 +64,7 @@ public class HookService {
 
         String headers = null;
         try {
-            headers = mvm.entrySet().stream().map(e -> this.capital(e.getKey()) + HEADER_VALUE_SEPARADOR + e.getValue().stream().collect(Collectors.joining(", "))).collect(Collectors.joining(HEADER_INDEX_SEPARATOR));
+            headers = mvm.entrySet().stream().map(e -> this.capital(e.getKey()) + HEADER_VALUE_SEPARADOR + String.join(", ", e.getValue())).collect(Collectors.joining(HEADER_INDEX_SEPARATOR));
         } catch (Exception ignored) {}
         HookDTO hook = new HookDTO();
         hook.setHora(new Date());
@@ -85,7 +84,7 @@ public class HookService {
     }
 
     public List<HookDTO> buscarHooks(int size) {
-        size = size <= 1 ? 1 : size >= MAX_SIZE ? MAX_SIZE : size;
+        size = Math.max(1,Math.min(size, MAX_SIZE));
         Page<Hook> hooks = repo.findAll(PageRequest.of(0, size, Sort.by(Sort.Direction.DESC, "hora")));
         return hooks.getContent().stream().map(HookDTO::new).collect(Collectors.toList());
     }
